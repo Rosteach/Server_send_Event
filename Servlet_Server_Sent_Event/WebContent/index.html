@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- css -->
+	<link rel="stylesheet" type="text/css" href="css/sse.css" />
+	<!-- scripts -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script type="text/javascript" src="js/sse.js"></script>
+	<title>Server Sent Events</title>
+</head>
+<body>
+	<button id="startButton" onclick="start()"> Start </button>
+	<button id="stopButton" onclick="stop()">Stop</button>
+	<button id="clearButton" onclick="clearText()">Clear</button>
+	<br>
+	<textarea id="displayTextArea" readonly="readonly" rows="30" cols="45"></textarea>
+		<script>
+		var eventSource = null;
+		function start(){
+			eventSource = new EventSource('http://localhost:8080/Servlet_Server_Sent_Event/SSEServlet');
+			eventSource.onopen = function(){displayTextArea.value += 'Connected...'+'\n';};
+			eventSource.onmessage = function(message){displayTextArea.value += message.data + '\n\n';};
+			eventSource.onerror = function(){displayTextArea.value += 'Error Occured...' + '\n';};
+			startButton.disabled=true;
+		};
+		function stop(){
+			eventSource.close();
+			startButton.disabled=false;
+		};
+		function clearText(){
+			displayTextArea.value ='';
+		};
+	</script>
+</body>
+</html>
